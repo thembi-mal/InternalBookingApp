@@ -1,0 +1,238 @@
+﻿
+@model BookingModel
+
+@{
+    ViewData["Title"] = "Create New Booking";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-calendar-plus me-2"></i>
+                        Create New Booking
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Create" id="bookingForm">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="form-group">
+                            <label asp-for="ResourceId" class="control-label"></label>
+                            <select asp-for="ResourceId" class="form-control" asp-items="ViewBag.ResourceId"></select>
+                        </div>
+
+                        @*<!-- Resource Selection -->
+                         <div class="mb-3">
+                            <label asp-for="ResourceId" class="form-label">
+                                <i class="fas fa-cube me-1"></i>
+                                Select Resource/Asset <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="ResourceId" asp-items="ViewBag.ResourceManagements" class="form-select" required>
+                                <option value="">-- Select a Resource --</option>
+                            </select>
+                            <span asp-validation-for="ResourceId" class="text-danger"></span>
+                            <div class="form-text">Choose the resource you want to book</div>
+                        </div> *@
+
+                        @*<div class="mb-3">
+                            <label asp-for="ResourceId" class="form-label">
+                                <i class="fas fa-cube me-1"></i>
+                                Select Resource/Asset <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="ResourceId" class="form-select" required>
+                                <option value="">-- Select a Resource --</option>
+                                @if (ViewBag.ResourceManagements != null)
+                                {
+                                    @foreach (var resource in (IEnumerable<ResourceManagement>)ViewBag.ResourceManagements)
+                                    {
+                                        <option value="@resource.Id">@resource.Name - @resource.Location</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="ResourceId" class="text-danger"></span>
+                            <div class="form-text">Choose the resource you want to book</div>
+                        </div>*@
+
+
+                        <!-- Date and Time Selection -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="StartTime" class="form-label">
+                                        <i class="fas fa-clock me-1"></i>
+                                        Start Time <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="StartTime"
+                                           type="datetime-local"
+                                           class="form-control"
+                                           required
+                                           min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="EndTime" class="form-label">
+                                        <i class="fas fa-clock me-1"></i>
+                                        End Time <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="EndTime"
+                                           type="datetime-local"
+                                           class="form-control"
+                                           required
+                                           min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Booked By -->
+                        <div class="mb-3">
+                            <label asp-for="BookedBy" class="form-label">
+                                <i class="fas fa-user me-1"></i>
+                                Booked By <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="BookedBy"
+                                   class="form-control"
+                                   placeholder="Enter your full name"
+                                   required
+                                   maxlength="100" />
+                            <span asp-validation-for="BookedBy" class="text-danger"></span>
+                        </div>
+
+                        <!-- Purpose -->
+                        <div class="mb-3">
+                            <label asp-for="Purpose" class="form-label">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Purpose <span class="text-danger">*</span>
+                            </label>
+                            <textarea asp-for="Purpose"
+                                      class="form-control"
+                                      rows="3"
+                                      placeholder="Describe the purpose of this booking (e.g., Team meeting, Client presentation, etc.)"
+                                      required
+                                      maxlength="500"></textarea>
+                            <span asp-validation-for="Purpose" class="text-danger"></span>
+                            <div class="form-text">Maximum 500 characters</div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>
+                                Back to Bookings
+                            </a>
+                            <div>
+                                <form method="post" asp-action="Create" asp-controller="BookingModelsController">
+                                <!-- Your form fields here -->
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-1"></i>
+                                    Create Booking
+                                </button>
+                                </form>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Information Panel -->
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Booking Guidelines
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Bookings can only be made for future dates and times
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            End time must be after start time
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Resources cannot be double-booked for overlapping times
+                        </li>
+                        <li class="mb-0">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            All fields marked with <span class="text-danger">*</span> are required
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Client-side validation for end time
+            $('#EndTime').on('change', function() {
+                var startTime = $('#StartTime').val();
+                var endTime = $(this).val();
+
+                if (startTime && endTime) {
+                    if (new Date(endTime) <= new Date(startTime)) {
+                        $(this).addClass('is-invalid');
+                        $(this).next('.text-danger').text('End time must be after start time');
+                    } else {
+                        $(this).removeClass('is-invalid');
+                        $(this).next('.text-danger').text('');
+                    }
+                }
+            });
+
+            // Update minimum end time when start time changes
+            $('#StartTime').on('change', function() {
+                var startTime = $(this).val();
+                if (startTime) {
+                    $('#EndTime').attr('min', startTime);
+                }
+            });
+
+            // Character counter for purpose field
+            $('#Purpose').on('input', function() {
+                var maxLength = 500;
+                var currentLength = $(this).val().length;
+                var remaining = maxLength - currentLength;
+
+                var counterText = remaining + ' characters remaining';
+                if (remaining < 0) {
+                    counterText = Math.abs(remaining) + ' characters over limit';
+                }
+
+                $(this).next('.text-danger').next('.form-text').text(counterText);
+            });
+
+            // Form submission confirmation
+            $('#bookingForm').on('submit', function(e) {
+                var resourceName = $('#ResourceId option:selected').text();
+                var startTime = $('#StartTime').val();
+                var endTime = $('#EndTime').val();
+                var bookedBy = $('#BookedBy').val();
+
+                if (resourceName && startTime && endTime && bookedBy) {
+                    var confirmMessage = `Are you sure you want to book "${resourceName}" from ${new Date(startTime).toLocaleString()} to ${new Date(endTime).toLocaleString()}?`;
+
+                    if (!confirm(confirmMessage)) {
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
